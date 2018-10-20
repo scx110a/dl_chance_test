@@ -47,6 +47,8 @@ var clearChance = 0
 // Summon counters
 var bonusCounter = 0
 var pityCounter = 0
+var maxNumNotHit = 0
+var numNotHit = 0
 
 // RNG
 var r = rand.New(rand.NewSource(time.Now().UnixNano()))
@@ -87,8 +89,13 @@ func averageSummonPerAF(numAF int) {
 	// is executed when a 5* is pulled.
 	for i := 0; i < numAF; i++ {
 		isAF := false
+		if maxNumNotHit < numNotHit {
+			maxNumNotHit = numNotHit
+		}
+		numNotHit = 0
 		for !isAF {
 			count += 1
+			numNotHit += 1
 			summon := single()
 			isAF = summon.IsAF()
 		}
@@ -100,6 +107,7 @@ func averageSummonPerAF(numAF int) {
 	fmt.Println("===== Average Summons For Halloween Eli =====")
 	fmt.Println(fmt.Sprintf("No. of Eli pulled: %d", numAF))
 	fmt.Println(fmt.Sprintf("Average summons per Eli: %s", aveStr))
+	fmt.Println(fmt.Sprintf("Max summons to get Eli: %d", maxNumNotHit))
 }
 
 // averageAFPerSummon prints how many featured adventurer
